@@ -8,12 +8,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AppApplication {
 
 	public static void main(String[] args) {
-		Dotenv dotenv = Dotenv.load();
+		loadEnv(); // 1. Carga el .env antes de iniciar Spring Boot
+		SpringApplication.run(AppApplication.class, args); // 2. Arranca el backend
+	}
 
-		System.setProperty("DB_URL", dotenv.get("DB_URL"));
-		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
-		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+	private static void loadEnv() {
+		Dotenv dotenv = Dotenv.configure()
+				.ignoreIfMissing()
+				.load();
 
-		SpringApplication.run(AppApplication.class, args);
+		// Solo setea si la variable existe en el .env
+		if (dotenv.get("DB_URL") != null)
+			System.setProperty("DB_URL", dotenv.get("DB_URL"));
+		if (dotenv.get("DB_USERNAME") != null)
+			System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
+		if (dotenv.get("DB_PASSWORD") != null)
+			System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
 	}
 }
