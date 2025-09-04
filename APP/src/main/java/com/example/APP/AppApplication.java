@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AppApplication {
 
 	public static void main(String[] args) {
-		loadEnv(); // 1. Carga el .env antes de iniciar Spring Boot
-		SpringApplication.run(AppApplication.class, args); // 2. Arranca el backend
+		loadEnv();
+		SpringApplication.run(AppApplication.class, args);
 	}
 
 	private static void loadEnv() {
@@ -17,7 +17,6 @@ public class AppApplication {
 				.ignoreIfMissing()
 				.load();
 
-		// Solo setea si la variable existe en el .env
 		if (dotenv.get("DB_URL") != null)
 			System.setProperty("DB_URL", dotenv.get("DB_URL"));
 		if (dotenv.get("DB_USERNAME") != null)
